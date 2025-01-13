@@ -64,11 +64,6 @@ Place the downloaded datasets in the following path:
 data/raw/
 ```
 
-## **👨‍💻 Author**  
-**Harshad Gholve**  
-- [GitHub](https://github.com/HarshadGholve)  
-- [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
-
 ---
 
 # **Dynamic Document Q&A App using RAG Pipeline** 🤖📚  
@@ -138,12 +133,13 @@ streamlit run app.py
 | Workflow Orchestration | LangGraph                | -                           |
 | Tracing & Observability | LangSmith               | -                           |
 
-## **👨‍💻 Author**  
-**Harshad Gholve**  
-- [GitHub](https://github.com/HarshadGholve)  
-- [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
 
 💡 **Future Enhancements**  
 - Multi-file uploads for complex queries.  
 - Add caching for faster responses.  
-- Human-in-the-loop feedback mechanism.  
+- Human-in-the-loop feedback mechanism.
+
+## **👨‍💻 Author**  
+**Harshad Gholve**  
+- [GitHub](https://github.com/HarshadGholve)  
+- [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
