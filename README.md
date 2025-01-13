@@ -1,4 +1,6 @@
-Here’s the updated **README** with the Kaggle dataset link included:
+## **Content**
+- SQL Code Generation using PyTorch
+- Dynamic Document Q&A App using RAG Pipeline
 
 ---
 
