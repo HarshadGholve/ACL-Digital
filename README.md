@@ -142,11 +142,6 @@ streamlit run app.py
 - Add caching for faster responses.  
 - Human-in-the-loop feedback mechanism.
 
-## **👨‍💻 Author**  
-**Harshad Gholve**  
-- [GitHub](https://github.com/HarshadGholve)  
-- [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
-
 
 ---
 
@@ -200,6 +195,9 @@ client = Groq(api_key="your_api_key_here")
 - Improve UI/UX.
 - Implement error handling for better user experience.
 
----
 
-Feel free to update the repository details and API key placeholders as needed! 😊
+## **👨‍💻 Author**  
+**Harshad Gholve**  
+- [GitHub](https://github.com/HarshadGholve)  
+- [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
+---
