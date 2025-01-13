@@ -59,7 +59,3 @@ The datasets are not included in the repository due to size constraints. You can
 **Harshad Gholve**  
 - [GitHub](https://github.com/HarshadGholve)  
 - [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
-
----
-
-Feel free to tweak it as needed! 😊
