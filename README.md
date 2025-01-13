@@ -83,8 +83,8 @@ dynamic-qna-app/
 
 ### **1. Clone the Repository**  
 ```bash
-git clone https://github.com/HarshadGholve/RAG-QnA-App.git
-cd dynamic-qna-app
+git clone https://github.com/HarshadGholve/ACL-Digital.git
+cd ACL-Digital/LangChain_RAG
 ```
 
 ### **2. Install Dependencies**  
