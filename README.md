@@ -67,7 +67,7 @@ A **Retrieval-Augmented Generation (RAG)** project powered by **Streamlit**, **C
 
 ## **📂 Project Structure**  
 ```
-dynamic-qna-app/
+LangChain_RAG/
 │
 ├── .env                    # Environment variables (API keys, configs)
 ├── app.py                  # Main Streamlit application
