@@ -1,3 +1,7 @@
+Here’s the updated **README** with the Kaggle dataset link included:
+
+---
+
 # **SQL Code Generation using PyTorch** 🧠💻  
 This project focuses on generating SQL queries from natural language inputs using a Transformer-based model built with **PyTorch**. The solution leverages **PostgreSQL** for database interaction and follows a structured approach to data processing, model training, and prediction.
 
@@ -52,8 +56,13 @@ python src/predict.py "List all restaurants with a rating above 4."
 - Transformers  
 
 ## **📦 Dataset**  
-The datasets are not included in the repository due to size constraints. You can download the datasets and place them in the following path:  
-`data/raw/`
+The datasets are not included in the repository due to size constraints. You can download the datasets from **Kaggle**:  
+➡️ [Yale University's SPIDER NLP Dataset](https://www.kaggle.com/datasets/jeromeblanchet/yale-universitys-spider-10-nlp-dataset/data)  
+
+Place the downloaded datasets in the following path:  
+```
+data/raw/
+```
 
 ## **👨‍💻 Author**  
 **Harshad Gholve**  
