@@ -60,6 +60,7 @@ The datasets are not included in the repository due to size constraints. You can
 - [GitHub](https://github.com/HarshadGholve)  
 - [LinkedIn](https://www.linkedin.com/in/harshad-gholve/)  
 
+---
 
 # **Dynamic Document Q&A App using RAG Pipeline** 🤖📚  
 A **Retrieval-Augmented Generation (RAG)** project powered by **Streamlit**, **ChromaDB**, and **GroqAPI**, enabling users to ask questions based on uploaded documents or web links. The app retrieves relevant context and generates precise answers using **Llama3-8b-8192** and **HuggingFace text embeddings**.
