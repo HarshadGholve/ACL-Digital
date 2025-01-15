@@ -30,7 +30,7 @@ model = TextToSQLTransformer(
 optimizer = AdamW(model.parameters(), lr=1e-4)
 
 # Define loss function
-loss_fn = torch.nn.CrossEntropyLoss()
+loss_fn = torch.nn.CrossEntropyLoss(ignore_index=0)
 
 # Training loop
 epochs = 5
@@ -40,20 +40,27 @@ for epoch in range(epochs):
     for batch in train_loader:
         optimizer.zero_grad()
         input_ids, output_ids = batch
-        
-        # Check the shape of input and output
-        print(f"input_ids shape: {input_ids.shape}, output_ids shape: {output_ids.shape}")
-        
-        # Ensure both input_ids and output_ids have the same batch size
-        assert input_ids.shape[0] == output_ids.shape[0], "Batch size mismatch between input and output"
 
-        predictions = model(input_ids, output_ids)
-        loss = loss_fn(predictions.transpose(1, 2), output_ids)
+        print(f"input_ids shape: {input_ids.shape}")
+        print(f"output_ids shape: {output_ids.shape}")
+        print(f"output_ids[:, :-1] shape: {output_ids[:, :-1].shape}")
+
+        # Ensure tensors are in the right shape
+        input_ids = input_ids.permute(1, 0)  # (batch_size, seq_len) -> (seq_len, batch_size)
+        output_ids = output_ids.permute(1, 0)  # Same for output
+        
+        # Forward pass
+        predictions = model(input_ids, output_ids[:, :-1])
+        predictions = predictions.permute(1, 0, 2)  # Convert back to (batch_size, seq_len, feature_dim)
+
+        # Compute loss
+        loss = loss_fn(predictions.reshape(-1, predictions.size(-1)), output_ids[:, 1:].reshape(-1))
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
 
     print(f"Epoch {epoch + 1}/{epochs}, Loss: {total_loss:.4f}")
+
 
     # Evaluate on dev set
     model.eval()
@@ -61,8 +68,14 @@ for epoch in range(epochs):
     with torch.no_grad():
         for batch in dev_loader:
             input_ids, output_ids = batch
-            predictions = model(input_ids)
-            dev_loss = loss_fn(predictions.transpose(1, 2), output_ids)
+
+            # Ensure tensors are in the right shape
+            input_ids = input_ids.permute(1, 0)  # (batch_size, seq_len) -> (seq_len, batch_size)
+            output_ids = output_ids.permute(1, 0)  # Same for output
+
+            predictions = model(input_ids, output_ids[:, :-1])
+            predictions = predictions.permute(1, 0, 2)  # Convert back to (batch_size, seq_len, feature_dim)
+            dev_loss = loss_fn(predictions.reshape(-1, predictions.size(-1)), output_ids[:, 1:].reshape(-1))
             total_dev_loss += dev_loss.item()
 
     print(f"Epoch {epoch + 1}/{epochs}, Dev Loss: {total_dev_loss:.4f}")

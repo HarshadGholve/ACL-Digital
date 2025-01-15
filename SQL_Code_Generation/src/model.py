@@ -40,25 +40,39 @@ class TextToSQLTransformer(nn.Module):
     def forward(self, src, tgt):
         """
         Forward pass through the model
-        :param src: Input sequence (question tokens) with shape (batch_size, seq_len)
-        :param tgt: Target sequence (SQL query tokens) with shape (batch_size, seq_len)
+        :param src: Input sequence (question tokens) with shape (batch_size, input_seq_len)
+        :param tgt: Target sequence (SQL query tokens) with shape (batch_size, output_seq_len)
         :return: Generated SQL query tokens
         """
-        # Add positional encoding to the input and target embeddings
-        # Positional encoding helps the model learn the order of tokens in the sequence
+        # Get the input and target sequence lengths
+        src_seq_len = src.size(1)
+        tgt_seq_len = tgt.size(1)
+
+        # Create attention masks to handle padding
+        src_mask = torch.zeros((src_seq_len, src_seq_len)).type(torch.bool).to(src.device)
+        tgt_mask = self._generate_square_subsequent_mask(tgt_seq_len).to(tgt.device)
+
+        # Add positional encoding to the embeddings
         src = self.src_embedding(src) + self.positional_encoding[:, :src.size(1), :]
         tgt = self.tgt_embedding(tgt) + self.positional_encoding[:, :tgt.size(1), :]
 
-        # Pass through the Transformer model
-        # The Transformer processes the question and generates the SQL query tokens
-        output = self.transformer(src, tgt)
+        # Pass through the Transformer model with masks
+        output = self.transformer(src, tgt, src_mask=src_mask, tgt_mask=tgt_mask)
 
         # Apply the fully connected layer to the transformer output
-        # This converts the transformer output into the desired SQL query vocabulary
         output = self.fc_out(output)
 
-        # Return the output (predicted SQL query tokens)
         return output
+
+    def _generate_square_subsequent_mask(self, size):
+        """
+        Generates a square mask for the target sequence to ensure that predictions
+        are only based on known outputs at each time step (causal masking).
+        """
+        mask = torch.triu(torch.ones(size, size)) == 1
+        mask = mask.transpose(0, 1)
+        mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
+        return mask
 
 # Function to create and initialize the model
 def create_model(input_vocab_size, output_vocab_size, embedding_dim, num_heads, num_layers, hidden_dim):

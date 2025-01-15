@@ -175,46 +175,81 @@ class SQLDataset(Dataset):
 def collate_fn(batch):
     inputs, outputs = zip(*batch)
 
-    # Convert to tensors, ensuring that each element is a tensor of integers
+    # Convert to tensors
     inputs = [torch.tensor(inp) for inp in inputs]
     outputs = [torch.tensor(out) for out in outputs]
 
-    # Pad sequences to the same length (using <pad> index as padding value)
-    padded_inputs = pad_sequence(inputs, batch_first=True, padding_value=0)  # 0 is the <pad> index
-    padded_outputs = pad_sequence(outputs, batch_first=True, padding_value=0)  # 0 is the <pad> index
+    # Pad sequences to the same length
+    padded_inputs = pad_sequence(inputs, batch_first=True, padding_value=0)
+    padded_outputs = pad_sequence(outputs, batch_first=True, padding_value=0)
+
+    # Debug shapes
+    if padded_inputs.size(0) != padded_outputs.size(0):
+        raise RuntimeError(f"Batch size mismatch: inputs {padded_inputs.size(0)}, outputs {padded_outputs.size(0)}")
 
     return padded_inputs, padded_outputs
 
+
+import torch
+from torch.utils.data import DataLoader, Dataset
+from collections import defaultdict
+import json
+
+# Pad sequences to a fixed length
+def pad_sequence(seq, max_len, pad_token=0):
+    return seq + [pad_token] * (max_len - len(seq))
+
+# Custom dataset class
+class SQLDataset(Dataset):
+    def __init__(self, inputs, outputs, input_vocab, output_vocab, max_len):
+        # Convert tokens to indices and pad sequences
+        self.inputs = [pad_sequence([input_vocab[token] for token in inp], max_len) for inp in inputs]
+        self.outputs = [pad_sequence([output_vocab[token] for token in out], max_len) for out in outputs]
+    
+    def __len__(self):
+        return len(self.inputs)
+    
+    def __getitem__(self, idx):
+        return torch.tensor(self.inputs[idx], dtype=torch.long), torch.tensor(self.outputs[idx], dtype=torch.long)
+
 # Function to prepare the data for training and development
-def prepare_data(train_path, dev_path):
-    """
-    Prepares the data for training and development.
-    Loads the data, tokenizes it, and creates dataloaders.
-    """
-    train_data = load_data(train_path)
-    dev_data = load_data(dev_path)
+def prepare_data(train_path, dev_path, batch_size=32, max_len=50):
+    # Function to load data from JSON file
+    def load_data(file_path):
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        inputs = [entry['question_toks'] for entry in data]
+        outputs = [entry['query_toks'] for entry in data]
+        return inputs, outputs
 
-    # Build vocabularies from training data
-    input_vocab = build_vocab(train_data)
-    output_vocab = build_vocab(train_data)
+    # Load train and dev data
+    train_inputs, train_outputs = load_data(train_path)
+    dev_inputs, dev_outputs = load_data(dev_path)
 
-    # Tokenize data using the vocabularies
-    train_input, train_output = tokenize_data(train_data, input_vocab, output_vocab)
-    dev_input, dev_output = tokenize_data(dev_data, input_vocab, output_vocab)
+    # Create vocabularies from training data
+    input_vocab = defaultdict(lambda: len(input_vocab))
+    output_vocab = defaultdict(lambda: len(output_vocab))
 
-    # Create datasets for PyTorch DataLoader
-    train_dataset = SQLDataset(train_input, train_output)
-    dev_dataset = SQLDataset(dev_input, dev_output)
+    # Add tokens to vocab
+    for question in train_inputs:
+        for token in question:
+            input_vocab[token]
 
-    # Create DataLoader with batching and shuffling
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=32, shuffle=True, collate_fn=collate_fn)
-    dev_loader = torch.utils.data.DataLoader(dev_dataset, batch_size=32, collate_fn=collate_fn)
+    for query in train_outputs:
+        for token in query:
+            output_vocab[token]
 
-    # Save vocabularies to files
-    os.makedirs('data/vocab', exist_ok=True)  # Create folder if it doesn't exist
-    torch.save(input_vocab, 'data/vocab/input_vocab.pth')
-    torch.save(output_vocab, 'data/vocab/output_vocab.pth')
+    # Special tokens
+    input_vocab['<pad>'] = 0
+    output_vocab['<pad>'] = 0
 
+    # Create datasets
+    train_dataset = SQLDataset(train_inputs, train_outputs, input_vocab, output_vocab, max_len)
+    dev_dataset = SQLDataset(dev_inputs, dev_outputs, input_vocab, output_vocab, max_len)
+
+    # Create dataloaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    dev_loader = DataLoader(dev_dataset, batch_size=batch_size)
 
     return train_loader, dev_loader, input_vocab, output_vocab
 
