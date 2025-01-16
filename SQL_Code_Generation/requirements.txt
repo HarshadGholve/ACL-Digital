@@ -1,5 +1,0 @@
-torch
-transformers
-psycopg2
-pandas
-tqdm
