@@ -1,3 +1,5 @@
+Note: This project is not yet complete. Still working upon it.
+
 # **SQL Code Generation using PyTorch** 🧠💻  
 This project focuses on generating SQL queries from natural language inputs using a Transformer-based model built with **PyTorch**. The solution leverages **PostgreSQL** for database interaction and follows a structured approach to data processing, model training, and prediction.
 
