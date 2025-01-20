@@ -19,8 +19,8 @@ Real-Time-Passenger-Safety/
 ## **🚀 How to Run**  
 ### **1. Clone the Repository**  
 ```bash
-git clone https://github.com/HarshadGholve/passenger_safety.git
-cd passenger_safety
+git clone https://github.com/HarshadGholve/ACL-Digital.git
+cd ACL-Digital/Computer_Vision/passenger_safety
 ```
 
 ### **2. Install Dependencies**  
