@@ -8,20 +8,19 @@ This project focuses on enhancing passenger safety by recognizing emotions such 
 ```
 Real-Time-Passenger-Safety/
 │
-├── src/                            # Source code
-│   ├── alert_system.py             # Email and alarm alert system
-│   ├── emotion_recognition.py      # Emotion detection logic using DeepFace
-│   ├── face_detection.py          # Face detection using OpenCV
-│   ├── main.py                    # Main script to run the real-time system
-│   └── requirements.txt           # List of required dependencies
-└── .gitignore                      # Ignored files (e.g., logs, CSV files)
+│── alert_system.py            # Email and alarm alert system
+│── emotion_recognition.py     # Emotion detection logic using DeepFace
+│── face_detection.py          # Face detection using OpenCV
+│── main.py                    # Main script to run the real-time system
+│── requirements.txt           # List of required dependencies
+└── .gitignore                 # Ignored files (e.g., logs, CSV files)
 ```
 
 ## **🚀 How to Run**  
 ### **1. Clone the Repository**  
 ```bash
-git clone https://github.com/HarshadGholve/Real-Time-Passenger-Safety.git
-cd Real-Time-Passenger-Safety
+git clone https://github.com/HarshadGholve/passenger_safety.git
+cd passenger_safety
 ```
 
 ### **2. Install Dependencies**  
@@ -31,7 +30,7 @@ pip install -r requirements.txt
 
 ### **3. Run the Main System**  
 ```bash
-python src/main.py
+python main.py
 ```
 
 The system will start detecting faces and emotions in real-time. If it detects **fear** or **sadness**, it will play an alarm and send an email notification.
