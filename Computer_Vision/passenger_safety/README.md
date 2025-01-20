@@ -6,7 +6,7 @@ This project focuses on enhancing passenger safety by recognizing emotions such 
 
 ## **📂 Project Structure**  
 ```
-Real-Time-Passenger-Safety/
+passenger_safety/
 │
 │── alert_system.py            # Email and alarm alert system
 │── emotion_recognition.py     # Emotion detection logic using DeepFace
